@@ -1,25 +1,27 @@
-import logo from './logo.svg';
-import './App.css';
+import { useState, useEffect } from "react";
+import Heading from "./Heading";
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
-  );
+export default function App() {
+    const [advice, setAdvice] = useState("");
+
+    async function getAdvice() {
+        // fetch api endpoint
+        const res = await fetch("https://api.adviceslip.com/advice");
+        // convert json to js object
+        const data = await res.json();
+        const advice = data.slip.advice;
+        setAdvice(advice);
+        // return the advice
+    }
+
+    useEffect(() => {
+        getAdvice();
+    }, []);
+
+    return (
+        <>
+            <Heading adviceProps={advice} />
+            <button onClick={getAdvice}>Helo</button>
+        </>
+    );
 }
-
-export default App;
